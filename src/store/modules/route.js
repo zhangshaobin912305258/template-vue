@@ -5,7 +5,20 @@ const state = {
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
-    state.routes = routes
+    state.routes.push({
+      path: 'home',
+      name: 'home',
+      label: '首页',
+      icon: '',
+      jump: true,
+      directory: false,
+      parent: null,
+      children: [],
+    })
+    for (let index = 0; index < routes.length; index++) {
+      state.routes.push(routes[index])
+    }
+    //state.routes = routes
     console.log(state.routes)
   },
 }

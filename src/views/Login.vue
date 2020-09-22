@@ -117,12 +117,13 @@ export default {
       ) {
         login(this.loginForm)
           .then((res) => {
-            console.log(res)
             setCookie('token', res.token)
+            /*
             let routes = res.routes
             this.$store.dispatch('route/setRoutes', routes)
             setCookie('routes', JSON.stringify(routes))
-            this.$router.push({ name: 'Main' })
+            */
+            this.$router.push({ name: 'main' })
           })
           .catch((err) => {
             console.log(err)

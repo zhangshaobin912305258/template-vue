@@ -32,6 +32,7 @@ export default {
       if (menu.jump) {
         let path = menu.path.replace('/', '-')
         this.$router.push({ name: path })
+        this.$store.dispatch('tag/addTag', menu)
       }
     },
   },

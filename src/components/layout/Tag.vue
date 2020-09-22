@@ -3,13 +3,13 @@
     <el-tag
       :key="tag.name"
       v-for="tag in tags"
-      :closable="tag.name !== currentTag.name"
+      :closable="tag.name !== currentTag.name && tag.name !== 'home'"
       :disable-transitions="false"
       effect="dark"
       :type="tag.name === currentTag.name ? 'success' : 'info'"
       @close="handleClose(tag)"
     >
-      {{ tag.name }}
+      {{ tag.label }}
     </el-tag>
   </div>
 </template>
@@ -17,12 +17,7 @@
 import { mapGetters } from 'vuex'
 export default {
   data() {
-    return {
-      currentTag: {
-        path: '/label2',
-        name: '标签二',
-      },
-    }
+    return {}
   },
   methods: {
     handleClose(tag) {
@@ -30,7 +25,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['tags']),
+    ...mapGetters(['tags', 'currentTag']),
   },
 }
 </script>
@@ -43,5 +38,8 @@ export default {
   color: #495060;
   border: 1px solid #d8dce5;
   background-color: #fff;
+}
+#tag {
+  margin-bottom: 10px;
 }
 </style>

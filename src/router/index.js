@@ -1,26 +1,36 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store/index'
 import { getCookie, setCookie } from '@/util/cookie'
 import { getRoutes } from '@/api/login'
+
+//解决路由重复点击的报错
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err)
+}
+
 Vue.use(VueRouter)
 
 const _import = require('@/router/_import_' + process.env.NODE_ENV) //获取组件的方法
 
 // 全局路由(无需嵌套上左右整体布局)
 const globalRoutes = [
-  { path: '/login', component: _import('Login'), name: 'Login' },
+  { path: '/login', component: _import('Login'), name: 'login' },
 ]
 
 // 主入口路由(需嵌套上左右整体布局)
 const mainRoutes = {
   path: '/',
   component: _import('Layout'),
-  name: 'Main',
+  name: 'main',
+  redirect: { name: 'home' },
+  children: [{ path: '/home', component: _import('Home'), name: 'home' }],
   beforeEnter(to, from, next) {
     let token = getCookie('token')
     if (!token || !/\S/.test(token)) {
       //clearLoginInfo()
-      next({ name: 'Login' })
+      next({ name: 'login' })
     }
     next()
   },
@@ -59,6 +69,7 @@ router.beforeEach((to, from, next) => {
       fnAddDynamicMenuRoutes(data.routes)
       router.options.isAddDynamicMenuRoutes = true
       setCookie('routes', JSON.stringify(data.routes))
+      store.dispatch('route/setRoutes', data.routes)
       next({ ...to, replace: true })
     })
   }
